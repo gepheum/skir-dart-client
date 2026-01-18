@@ -435,7 +435,7 @@ class _EnumUnknownVariant<E> extends _EnumVariant<E>
     this.wrapUnrecognized,
     this.getUnrecognized,
     this.asString,
-  ) : super('?');
+  ) : super('UNKNOWN');
 
   @override
   int get number => 0;
@@ -445,7 +445,7 @@ class _EnumUnknownVariant<E> extends _EnumVariant<E>
   @override
   dynamic toJson(E input, bool readableFlavor) {
     if (readableFlavor) {
-      return '?';
+      return 'UNKNOWN';
     } else {
       final unrecognized = getUnrecognized(input);
       return unrecognized?._jsonElement ?? 0;
