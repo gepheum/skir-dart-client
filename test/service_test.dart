@@ -166,7 +166,7 @@ void main() {
 
       expect(response.statusCode, equals(200));
       expect(response.contentType, equals('text/html; charset=utf-8'));
-      expect(response.data, contains('Skir Studio'));
+      expect(response.data, contains('RPC Studio'));
       expect(response.data, contains('<!DOCTYPE html>'));
     });
 
