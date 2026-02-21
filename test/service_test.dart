@@ -144,13 +144,13 @@ void main() {
       service.addMethod(method, (request, meta) async => 'echo: $request');
     });
 
-    test('handles empty request body with method list', () async {
+    test('handles empty request body with studio', () async {
       final response = await service.handleRequest('', {});
 
       expect(response.statusCode, equals(200));
-      expect(response.contentType, equals('application/json'));
-      expect(response.data, contains('methods'));
-      expect(response.data, contains('echo'));
+      expect(response.contentType, equals('text/html; charset=utf-8'));
+      expect(response.data, contains('RPC Studio'));
+      expect(response.data, contains('<!DOCTYPE html>'));
     });
 
     test('handles "list" request with method list', () async {

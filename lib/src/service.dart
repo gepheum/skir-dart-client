@@ -314,7 +314,7 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
     String requestBody,
     RequestMeta requestMeta,
   ) async {
-    if (requestBody.isEmpty || requestBody == 'list') {
+    if (requestBody == 'list') {
       final methodsData = _methodImpls.values
           .map((methodImpl) => _JsonObjectBuilder()
               .put("method", methodImpl.method.name)
@@ -331,7 +331,7 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
       const encoder = JsonEncoder.withIndent('  ');
       final jsonCode = encoder.convert(json);
       return RawResponse._okJson(jsonCode);
-    } else if (requestBody == 'studio') {
+    } else if (requestBody.isEmpty || requestBody == 'studio') {
       final studioHtml = _getStudioHtml(options.studioAppJsUrl);
       return RawResponse._okHtml(studioHtml);
     }
