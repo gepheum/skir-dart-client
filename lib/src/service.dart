@@ -210,7 +210,7 @@ class MethodErrorInfo<RequestMeta> {
   });
 }
 
-/// Configuration options for a Skir service.
+/// Configuration options for a SkirRPC service.
 class ServiceOptions<RequestMeta> {
   /// Whether to keep unrecognized values when deserializing requests.
   ///
@@ -278,8 +278,8 @@ abstract class RequestHandler<RequestMeta> {
 /// serialization, and error handling for RPC operations.
 ///
 /// See https://github.com/gepheum/skir-dart-example/blob/main/bin/start_service.dart
-/// for a full example of how to create a Skir service and install it on an HTTP
-/// server using the Shelf framework.
+/// for a full example of how to create a SkirRPC service and install it on an
+/// HTTP server using the Shelf framework.
 class Service<RequestMeta> implements RequestHandler<RequestMeta> {
   final Map<int, _MethodImpl<dynamic, dynamic, RequestMeta>> _methodImpls;
   final options = new ServiceOptions<RequestMeta>();
@@ -511,7 +511,7 @@ String _getStudioHtml(String studioAppJsUrl) {
   <head>
     <meta charset="utf-8" />
     <title>RPC Studio</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚡</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐙</text></svg>">
     <script src="$escapedUrl"></script>
   </head>
   <body style="margin: 0; padding: 0;">

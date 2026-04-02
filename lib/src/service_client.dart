@@ -21,7 +21,7 @@ class RpcException implements Exception {
   String toString() => 'RpcException($statusCode): $message';
 }
 
-/// Sends RPCs to a skir service.
+/// Sends RPCs to a SkirRPC service.
 class ServiceClient {
   final Uri _serviceUri;
   final Map<String, String> _defaultHeaders;
