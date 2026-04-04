@@ -122,7 +122,12 @@ void main() {
       );
 
       colorEnumBuilder.addConstantVariant(
-          1, 'red', 'red', "red color", colorRed);
+        1,
+        'red',
+        'red',
+        "red color",
+        colorRed,
+      );
       colorEnumBuilder.addConstantVariant(2, 'green', 'green', "", colorGreen);
       colorEnumBuilder.addConstantVariant(3, 'blue', 'blue', "", colorBlue);
       colorEnumBuilder.addWrapperVariant<ColorCustomOption, int>(
@@ -151,7 +156,12 @@ void main() {
       );
 
       statusEnumBuilder.addConstantVariant(
-          1, 'active', 'active', "", StatusActive());
+        1,
+        'active',
+        'active',
+        "",
+        StatusActive(),
+      );
       statusEnumBuilder.addConstantVariant(
         2,
         'inactive',
@@ -445,13 +455,23 @@ void main() {
       );
 
       testEnumBuilder.addConstantVariant(
-          1, 'test', 'test', "red color", colorRed);
+        1,
+        'test',
+        'test',
+        "red color",
+        colorRed,
+      );
       testEnumBuilder.finalize();
 
       // Adding fields after finalization should throw
       expect(
         () => testEnumBuilder.addConstantVariant(
-            2, 'test2', 'test2', "green color", colorGreen),
+          2,
+          'test2',
+          'test2',
+          "green color",
+          colorGreen,
+        ),
         throwsStateError,
       );
 
@@ -756,31 +776,47 @@ void main() {
       // it uses the default value of the wrapped type (fromJson(0, ...))
 
       // Dense format: just the number, no value array
-      final fromNumber =
-          colorSerializer.fromJson(4, keepUnrecognizedValues: false);
+      final fromNumber = colorSerializer.fromJson(
+        4,
+        keepUnrecognizedValues: false,
+      );
       expect(fromNumber, isA<ColorCustomOption>());
-      expect((fromNumber as ColorCustomOption).rgb,
-          equals(0)); // Default int32 is 0
+      expect(
+        (fromNumber as ColorCustomOption).rgb,
+        equals(0),
+      ); // Default int32 is 0
 
       // Readable format: just the name string, no value object
-      final fromName =
-          colorSerializer.fromJson('custom', keepUnrecognizedValues: false);
+      final fromName = colorSerializer.fromJson(
+        'custom',
+        keepUnrecognizedValues: false,
+      );
       expect(fromName, isA<ColorCustomOption>());
       expect(
-          (fromName as ColorCustomOption).rgb, equals(0)); // Default int32 is 0
+        (fromName as ColorCustomOption).rgb,
+        equals(0),
+      ); // Default int32 is 0
 
       // Test with status enum too (wrapper with string type)
-      final statusFromNumber =
-          statusSerializer.fromJson(3, keepUnrecognizedValues: false);
+      final statusFromNumber = statusSerializer.fromJson(
+        3,
+        keepUnrecognizedValues: false,
+      );
       expect(statusFromNumber, isA<StatusPendingOption>());
-      expect((statusFromNumber as StatusPendingOption).reason,
-          equals('')); // Default string is ''
+      expect(
+        (statusFromNumber as StatusPendingOption).reason,
+        equals(''),
+      ); // Default string is ''
 
-      final statusFromName =
-          statusSerializer.fromJson('pending', keepUnrecognizedValues: false);
+      final statusFromName = statusSerializer.fromJson(
+        'pending',
+        keepUnrecognizedValues: false,
+      );
       expect(statusFromName, isA<StatusPendingOption>());
-      expect((statusFromName as StatusPendingOption).reason,
-          equals('')); // Default string is ''
+      expect(
+        (statusFromName as StatusPendingOption).reason,
+        equals(''),
+      ); // Default string is ''
     });
 
     test('enum serializer - wrapper variant with explicit values', () {
@@ -788,35 +824,41 @@ void main() {
       // This ensures wrapFromJson (not wrapDefault) is used when values are present
 
       // Dense format with value
-      final colorWithValue =
-          colorSerializer.fromJson([4, 255], keepUnrecognizedValues: false);
+      final colorWithValue = colorSerializer.fromJson([
+        4,
+        255,
+      ], keepUnrecognizedValues: false);
       expect(colorWithValue, isA<ColorCustomOption>());
       expect((colorWithValue as ColorCustomOption).rgb, equals(255));
 
       // Readable format with value
-      final colorWithValueReadable = colorSerializer.fromJson(
-        {'kind': 'custom', 'value': 1024},
-        keepUnrecognizedValues: false,
-      );
+      final colorWithValueReadable = colorSerializer.fromJson({
+        'kind': 'custom',
+        'value': 1024,
+      }, keepUnrecognizedValues: false);
       expect(colorWithValueReadable, isA<ColorCustomOption>());
       expect((colorWithValueReadable as ColorCustomOption).rgb, equals(1024));
 
       // Test with status enum too
-      final statusWithValue = statusSerializer.fromJson(
-        [3, 'custom reason'],
-        keepUnrecognizedValues: false,
-      );
+      final statusWithValue = statusSerializer.fromJson([
+        3,
+        'custom reason',
+      ], keepUnrecognizedValues: false);
       expect(statusWithValue, isA<StatusPendingOption>());
-      expect((statusWithValue as StatusPendingOption).reason,
-          equals('custom reason'));
-
-      final statusWithValueReadable = statusSerializer.fromJson(
-        {'kind': 'pending', 'value': 'another reason'},
-        keepUnrecognizedValues: false,
+      expect(
+        (statusWithValue as StatusPendingOption).reason,
+        equals('custom reason'),
       );
+
+      final statusWithValueReadable = statusSerializer.fromJson({
+        'kind': 'pending',
+        'value': 'another reason',
+      }, keepUnrecognizedValues: false);
       expect(statusWithValueReadable, isA<StatusPendingOption>());
-      expect((statusWithValueReadable as StatusPendingOption).reason,
-          equals('another reason'));
+      expect(
+        (statusWithValueReadable as StatusPendingOption).reason,
+        equals('another reason'),
+      );
     });
 
     test('enum serializer - binary wrapper variant default values', () {

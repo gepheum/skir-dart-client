@@ -199,7 +199,14 @@ class _StructSerializerImpl<Frozen, Mutable>
   ) {
     _checkNotFinalized();
     final field = _StructFieldImpl<Frozen, Mutable, Value>(
-        name, dartName, number, serializer, doc, getter, setter);
+      name,
+      dartName,
+      number,
+      serializer,
+      doc,
+      getter,
+      setter,
+    );
     _mutableFields.add(field);
     _nameToField[field.name] = field;
   }

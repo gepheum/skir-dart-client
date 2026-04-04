@@ -6,32 +6,34 @@ void main() {
     test('status codes are correct', () {
       expect(
         const RawResponse(
-                data: '', statusCode: 200, contentType: 'application/json')
-            .statusCode,
+          data: '',
+          statusCode: 200,
+          contentType: 'application/json',
+        ).statusCode,
         equals(200),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 200,
-                contentType: 'text/html; charset=utf-8')
-            .statusCode,
+          data: '',
+          statusCode: 200,
+          contentType: 'text/html; charset=utf-8',
+        ).statusCode,
         equals(200),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 400,
-                contentType: 'text/plain; charset=utf-8')
-            .statusCode,
+          data: '',
+          statusCode: 400,
+          contentType: 'text/plain; charset=utf-8',
+        ).statusCode,
         equals(400),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 500,
-                contentType: 'text/plain; charset=utf-8')
-            .statusCode,
+          data: '',
+          statusCode: 500,
+          contentType: 'text/plain; charset=utf-8',
+        ).statusCode,
         equals(500),
       );
     });
@@ -39,32 +41,34 @@ void main() {
     test('content types are correct', () {
       expect(
         const RawResponse(
-                data: '', statusCode: 200, contentType: 'application/json')
-            .contentType,
+          data: '',
+          statusCode: 200,
+          contentType: 'application/json',
+        ).contentType,
         equals('application/json'),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 200,
-                contentType: 'text/html; charset=utf-8')
-            .contentType,
+          data: '',
+          statusCode: 200,
+          contentType: 'text/html; charset=utf-8',
+        ).contentType,
         equals('text/html; charset=utf-8'),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 400,
-                contentType: 'text/plain; charset=utf-8')
-            .contentType,
+          data: '',
+          statusCode: 400,
+          contentType: 'text/plain; charset=utf-8',
+        ).contentType,
         equals('text/plain; charset=utf-8'),
       );
       expect(
         const RawResponse(
-                data: '',
-                statusCode: 500,
-                contentType: 'text/plain; charset=utf-8')
-            .contentType,
+          data: '',
+          statusCode: 500,
+          contentType: 'text/plain; charset=utf-8',
+        ).contentType,
         equals('text/plain; charset=utf-8'),
       );
     });
@@ -118,13 +122,10 @@ void main() {
         "doc text",
       );
 
-      expect(
-        () {
-          builder.addMethod(method1, (request, meta) async => 'response1');
-          builder.addMethod(method2, (request, meta) async => 'response2');
-        },
-        returnsNormally,
-      );
+      expect(() {
+        builder.addMethod(method1, (request, meta) async => 'response1');
+        builder.addMethod(method2, (request, meta) async => 'response2');
+      }, returnsNormally);
     });
   });
 
@@ -223,13 +224,7 @@ void main() {
       final service = Service<String>();
 
       service.addMethod<String, String>(
-        Method(
-          'echo',
-          1,
-          Serializers.string,
-          Serializers.string,
-          "doc text",
-        ),
+        Method('echo', 1, Serializers.string, Serializers.string, "doc text"),
         (request, token) async => 'User $token: $request',
       );
 

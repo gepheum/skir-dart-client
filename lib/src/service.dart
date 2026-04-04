@@ -6,31 +6,42 @@ class RawResponse {
   final int statusCode;
   final String contentType;
 
-  const RawResponse(
-      {required this.data,
-      required this.statusCode,
-      required this.contentType});
+  const RawResponse({
+    required this.data,
+    required this.statusCode,
+    required this.contentType,
+  });
 
   static RawResponse _okJson(String data) {
     return RawResponse(
-        data: data, statusCode: 200, contentType: 'application/json');
+      data: data,
+      statusCode: 200,
+      contentType: 'application/json',
+    );
   }
 
   static RawResponse _okHtml(String data) {
     return RawResponse(
-        data: data, statusCode: 200, contentType: 'text/html; charset=utf-8');
+      data: data,
+      statusCode: 200,
+      contentType: 'text/html; charset=utf-8',
+    );
   }
 
   static RawResponse _badRequest(String data) {
     return RawResponse(
-        data: data, statusCode: 400, contentType: 'text/plain; charset=utf-8');
+      data: data,
+      statusCode: 400,
+      contentType: 'text/plain; charset=utf-8',
+    );
   }
 
   static RawResponse _serverError(String data, [int statusCode = 500]) {
     return RawResponse(
-        data: data,
-        statusCode: statusCode,
-        contentType: 'text/plain; charset=utf-8');
+      data: data,
+      statusCode: statusCode,
+      contentType: 'text/plain; charset=utf-8',
+    );
   }
 }
 
@@ -316,15 +327,21 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
   ) async {
     if (requestBody == 'list') {
       final methodsData = _methodImpls.values
-          .map((methodImpl) => _JsonObjectBuilder()
-              .put("method", methodImpl.method.name)
-              .put("number", methodImpl.method.number)
-              .put("request",
-                  methodImpl.method.requestSerializer.typeDescriptor.asJson)
-              .put("response",
-                  methodImpl.method.responseSerializer.typeDescriptor.asJson)
-              .putIf("doc", methodImpl.method.doc, (doc) => doc.isNotEmpty)
-              .build())
+          .map(
+            (methodImpl) => _JsonObjectBuilder()
+                .put("method", methodImpl.method.name)
+                .put("number", methodImpl.method.number)
+                .put(
+                  "request",
+                  methodImpl.method.requestSerializer.typeDescriptor.asJson,
+                )
+                .put(
+                  "response",
+                  methodImpl.method.responseSerializer.typeDescriptor.asJson,
+                )
+                .putIf("doc", methodImpl.method.doc, (doc) => doc.isNotEmpty)
+                .build(),
+          )
           .toList();
 
       final json = {'methods': methodsData};
@@ -360,7 +377,8 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
       final methodField = reqBodyJson['method'];
       if (methodField == null) {
         return RawResponse._badRequest(
-            'bad request: missing \'method\' field in JSON');
+          'bad request: missing \'method\' field in JSON',
+        );
       }
 
       if (methodField is String) {
@@ -371,14 +389,16 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
         methodNumber = methodField;
       } else {
         return RawResponse._badRequest(
-            'bad request: \'method\' field must be a string or an integer');
+          'bad request: \'method\' field must be a string or an integer',
+        );
       }
 
       format = 'readable';
       final requestField = reqBodyJson['request'];
       if (requestField == null) {
         return RawResponse._badRequest(
-            'bad request: missing \'request\' field in JSON');
+          'bad request: missing \'request\' field in JSON',
+        );
       }
       requestData = requestField;
       requestDataIsJson = true;
@@ -400,7 +420,8 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
         final methodNumberRegex = RegExp(r'^-?[0-9]+$');
         if (!methodNumberRegex.hasMatch(methodNumberStr)) {
           return RawResponse._badRequest(
-              'bad request: can\'t parse method number');
+            'bad request: can\'t parse method number',
+          );
         }
         methodNumber = int.parse(methodNumberStr);
       } else {
@@ -417,11 +438,13 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
           .toList();
       if (nameMatches.isEmpty) {
         return RawResponse._badRequest(
-            'bad request: method not found: $methodName');
+          'bad request: method not found: $methodName',
+        );
       } else if (nameMatches.length > 1) {
         return RawResponse._badRequest(
-            'bad request: method name \'$methodName\' is ambiguous; '
-            'use method number instead');
+          'bad request: method name \'$methodName\' is ambiguous; '
+          'use method number instead',
+        );
       }
       resolvedMethodNumber = nameMatches[0].method.number;
     } else {
@@ -431,7 +454,8 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
     final methodImpl = _methodImpls[resolvedMethodNumber];
     if (methodImpl == null) {
       return RawResponse._badRequest(
-          'bad request: method not found: $methodName; number: $resolvedMethodNumber');
+        'bad request: method not found: $methodName; number: $resolvedMethodNumber',
+      );
     }
 
     final dynamic request;
@@ -449,15 +473,13 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
       }
     } catch (e) {
       return RawResponse._badRequest(
-          'bad request: can\'t parse JSON: ${e.toString()}');
+        'bad request: can\'t parse JSON: ${e.toString()}',
+      );
     }
 
     final dynamic response;
     try {
-      response = await methodImpl.impl(
-        request,
-        requestMeta,
-      );
+      response = await methodImpl.impl(request, requestMeta);
     } catch (e) {
       final errorInfo = MethodErrorInfo<RequestMeta>(
         error: e,
@@ -485,7 +507,8 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
       );
     } catch (e) {
       return RawResponse._serverError(
-          "server error: can't serialize response to JSON: ${e.toString()}");
+        "server error: can't serialize response to JSON: ${e.toString()}",
+      );
     }
 
     return RawResponse._okJson(responseJson);

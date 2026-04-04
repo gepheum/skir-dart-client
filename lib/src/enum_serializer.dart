@@ -61,19 +61,9 @@ class internal__EnumSerializerBuilder<Enum> {
     String name,
     String dartName,
     String doc,
-    Enum instance, [
-    Enum Function(internal__UnrecognizedVariant)? wrapUnrecognized,
-    internal__UnrecognizedVariant? Function(Enum)? getUnrecognized,
-  ]) {
-    _impl.addConstantVariant(
-      number,
-      name,
-      dartName,
-      doc,
-      instance,
-      wrapUnrecognized,
-      getUnrecognized,
-    );
+    Enum instance,
+  ) {
+    _impl.addConstantVariant(number, name, dartName, doc, instance);
   }
 
   void addWrapperVariant<Wrapper extends Enum, Value>(
@@ -140,27 +130,14 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
     String name,
     String dartName,
     String doc,
-    E instance, [
-    E Function(internal__UnrecognizedVariant)? wrapUnrecognized,
-    internal__UnrecognizedVariant? Function(E)? getUnrecognized,
-  ]) {
+    E instance,
+  ) {
     checkNotFinalized();
     final ordinal = getOrdinal(instance);
     final asString = '${dartClassName}.${dartName}';
-    final constantWrapUnrecognized =
-        wrapUnrecognized ?? (internal__UnrecognizedVariant _) => instance;
-    final constantGetUnrecognized = getUnrecognized ?? (E _) => null;
     addVariantImpl(
       ordinal: ordinal,
-      variant: _EnumConstantVariant<E>(
-        number,
-        name,
-        doc,
-        instance,
-        asString,
-        constantWrapUnrecognized,
-        constantGetUnrecognized,
-      ),
+      variant: _EnumConstantVariant<E>(number, name, doc, instance, asString),
     );
   }
 
@@ -217,8 +194,10 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
     }
   }
 
-  void addVariantImpl(
-      {required int ordinal, required _EnumVariant<E> variant}) {
+  void addVariantImpl({
+    required int ordinal,
+    required _EnumVariant<E> variant,
+  }) {
     mutableVariants.add(variant);
     numberToVariant[variant.number] = variant;
     ordinalToVariant[ordinal] = variant;
@@ -285,13 +264,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
           final second = json[1];
           return variant.wrapFromJson(second, keepUnrecognizedValues);
         } else if (variant is _EnumConstantVariant<E>) {
-          if (keepUnrecognizedValues) {
-            return variant.wrapUnrecognizedValue(
-              internal__UnrecognizedVariant._fromJson(json),
-            );
-          } else {
-            return variant.constant;
-          }
+          return variant.constant;
         } else if (variant is _EnumRemovedNumber<E>) {
           return unknown.constant;
         } else {
@@ -373,17 +346,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
         result = variant.wrapDecoded(stream, keepUnrecognizedValues);
       } else if (variant is _EnumConstantVariant<E>) {
         stream.decodeUnused();
-        if (keepUnrecognizedValues) {
-          final unrecognizedBytes = stream.bytes.sublist(
-            startPosition,
-            stream.position,
-          );
-          result = variant.wrapUnrecognizedValue(
-            internal__UnrecognizedVariant._fromBytes(unrecognizedBytes),
-          );
-        } else {
-          result = variant.constant;
-        }
+        result = variant.constant;
       } else if (variant is _EnumRemovedNumber<E>) {
         stream.decodeUnused();
         result = unknown.constant;
@@ -528,8 +491,6 @@ class _EnumConstantVariant<E> extends _EnumVariant<E>
   @override
   final E constant;
   final String asString;
-  final E Function(internal__UnrecognizedVariant) wrapUnrecognized;
-  final internal__UnrecognizedVariant? Function(E) getUnrecognized;
 
   _EnumConstantVariant(
     this.number,
@@ -537,34 +498,17 @@ class _EnumConstantVariant<E> extends _EnumVariant<E>
     this.doc,
     this.constant,
     this.asString,
-    this.wrapUnrecognized,
-    this.getUnrecognized,
   ) : super(name);
 
   ReflectiveEnumVariant<E> get asVariant => this;
 
-  E wrapUnrecognizedValue(internal__UnrecognizedVariant unrecognized) {
-    return wrapUnrecognized(unrecognized);
-  }
+  @override
+  dynamic toJson(E input, bool readableFlavor) =>
+      readableFlavor ? name : number;
 
   @override
-  dynamic toJson(E input, bool readableFlavor) {
-    final unrecognized = getUnrecognized(input);
-    if (unrecognized?._jsonElement != null) {
-      return unrecognized!._jsonElement;
-    }
-    return readableFlavor ? name : number;
-  }
-
-  @override
-  void encode(E input, Uint8Buffer buffer) {
-    final unrecognized = getUnrecognized(input);
-    if (unrecognized?._bytes != null) {
-      buffer.addAll(unrecognized!._bytes!);
-      return;
-    }
-    _BinaryWriter.encodeInt32(number, buffer);
-  }
+  void encode(E input, Uint8Buffer buffer) =>
+      _BinaryWriter.encodeInt32(number, buffer);
 
   @override
   void appendString(E input, StringBuffer out, String eolIndent) {

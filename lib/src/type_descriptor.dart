@@ -392,7 +392,11 @@ class StructDescriptor extends RecordDescriptor
   Iterable<StructField> get fields => _fields;
 
   StructDescriptor._(
-      this._recordId, this.doc, this.removedNumbers, this._fields);
+    this._recordId,
+    this.doc,
+    this.removedNumbers,
+    this._fields,
+  );
 
   @override
   String get name => _recordId.name;
@@ -449,7 +453,8 @@ abstract class ReflectiveStructDescriptor<Frozen, Mutable>
 
   @override
   ReflectiveStructField<Frozen, Mutable, dynamic>? getFieldByNumber(
-      int number) {
+    int number,
+  ) {
     _numberToField ??= {for (var f in fields) f.number: f};
     return _numberToField![number];
   }
@@ -564,7 +569,11 @@ class EnumDescriptor extends RecordDescriptor
   Iterable<EnumVariant> get variants => _variants;
 
   EnumDescriptor._(
-      this._recordId, this.doc, this.removedNumbers, this._variants);
+    this._recordId,
+    this.doc,
+    this.removedNumbers,
+    this._variants,
+  );
 
   @override
   String get name => _recordId.name;
@@ -777,17 +786,23 @@ void _addRecordDefinitions(
         .put('id', recordId)
         .putIf("doc", typeDescriptor.doc, (doc) => doc.isNotEmpty)
         .put(
-            'fields',
-            typeDescriptor.fields
-                .map((f) => _JsonObjectBuilder()
+          'fields',
+          typeDescriptor.fields
+              .map(
+                (f) => _JsonObjectBuilder()
                     .put('name', f.name)
                     .put('number', f.number)
                     .put('type', _getTypeSignature(f.type))
                     .putIf("doc", f.doc, (doc) => doc.isNotEmpty)
-                    .build())
-                .toList())
-        .putIf("removed_numbers", removedNumbers,
-            (removedNumbers) => removedNumbers.isNotEmpty)
+                    .build(),
+              )
+              .toList(),
+        )
+        .putIf(
+          "removed_numbers",
+          removedNumbers,
+          (removedNumbers) => removedNumbers.isNotEmpty,
+        )
         .build();
     recordIdToDefinition[recordId] = recordDefinition;
 
@@ -807,22 +822,29 @@ void _addRecordDefinitions(
         .put('id', recordId)
         .putIf("doc", typeDescriptor.doc, (doc) => doc.isNotEmpty)
         .put(
-            'variants',
-            typeDescriptor.variants
-                .map((v) => _JsonObjectBuilder()
+          'variants',
+          typeDescriptor.variants
+              .map(
+                (v) => _JsonObjectBuilder()
                     .put('name', v.name)
                     .put('number', v.number)
                     .putIf(
-                        "type",
-                        v is EnumWrapperVariant
-                            ? _getTypeSignature(v.type)
-                            : null,
-                        (type) => type != null)
+                      "type",
+                      v is EnumWrapperVariant
+                          ? _getTypeSignature(v.type)
+                          : null,
+                      (type) => type != null,
+                    )
                     .putIf("doc", v.doc, (doc) => doc.isNotEmpty)
-                    .build())
-                .toList())
-        .putIf("removed_numbers", removedNumbers,
-            (removedNumbers) => removedNumbers.isNotEmpty)
+                    .build(),
+              )
+              .toList(),
+        )
+        .putIf(
+          "removed_numbers",
+          removedNumbers,
+          (removedNumbers) => removedNumbers.isNotEmpty,
+        )
         .build();
     recordIdToDefinition[recordId] = recordDefinition;
 

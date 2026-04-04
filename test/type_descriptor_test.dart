@@ -382,8 +382,12 @@ void main() {
     test('field types work correctly', () {
       final stringType = StringDescriptor.instance;
       final structField = StructField('name', 1, stringType, "the doc");
-      final enumWrapperField =
-          EnumWrapperVariant('value', 2, stringType, "the doc");
+      final enumWrapperField = EnumWrapperVariant(
+        'value',
+        2,
+        stringType,
+        "the doc",
+      );
       final enumConstantField = EnumConstantVariant('CONSTANT', 3, "the doc");
 
       expect(structField.type, equals(stringType));
