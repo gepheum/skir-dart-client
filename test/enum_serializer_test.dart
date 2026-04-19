@@ -884,5 +884,47 @@ void main() {
       expect(decodedStatus, isA<StatusPendingOption>());
       expect((decodedStatus as StatusPendingOption).reason, equals(''));
     });
+
+    // ── Enum name case-compatibility tests ─────────────────────────────────
+
+    // Condition 1: serialise using the registered (lower_case) name
+
+    test(
+        'enum name case – serialises lower_case constant name in readable JSON',
+        () {
+      expect(
+        colorSerializer.toJson(colorRed, readableFlavor: true),
+        equals('red'),
+      );
+      expect(
+        colorSerializer.toJson(colorGreen, readableFlavor: true),
+        equals('green'),
+      );
+    });
+
+    // Condition 2: parse both UPPER_CASE and lower_case names
+
+    test('enum name case – parses UPPER_CASE constant name', () {
+      final result =
+          colorSerializer.fromJson('RED', keepUnrecognizedValues: false);
+      expect(result, isA<ColorRed>());
+    });
+
+    test('enum name case – parses lower_case constant name', () {
+      final result =
+          colorSerializer.fromJson('green', keepUnrecognizedValues: false);
+      expect(result, isA<ColorGreen>());
+    });
+
+    test(
+        'enum name case – UPPER_CASE and lower_case constant names yield same result',
+        () {
+      final fromUpper =
+          colorSerializer.fromJson('RED', keepUnrecognizedValues: false);
+      final fromLower =
+          colorSerializer.fromJson('red', keepUnrecognizedValues: false);
+      expect(fromUpper, isA<ColorRed>());
+      expect(fromLower, isA<ColorRed>());
+    });
   });
 }
