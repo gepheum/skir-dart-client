@@ -243,6 +243,19 @@ void main() {
       );
     });
 
+    test('enum serializer - UNKNOWN and unknown are treated the same', () {
+      final fromUpper = colorSerializer.fromJson(
+        'UNKNOWN',
+        keepUnrecognizedValues: false,
+      );
+      final fromLower = colorSerializer.fromJson(
+        'unknown',
+        keepUnrecognizedValues: false,
+      );
+      expect(fromUpper, isA<ColorUnknown>());
+      expect(fromLower, isA<ColorUnknown>());
+    });
+
     test('enum serializer - wrapper fields dense JSON', () {
       final customColor = ColorCustomOption(0xFF0000);
 

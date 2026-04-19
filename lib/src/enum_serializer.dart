@@ -202,9 +202,10 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
     numberToVariant[variant.number] = variant;
     ordinalToVariant[ordinal] = variant;
     nameToVariant[variant.name] = variant;
-    // Register case aliases for constant variants so that both UPPER_CASE
+    // Register case aliases for constants and UNKNOWN so that both UPPER_CASE
     // and lower_case names are accepted when parsing readable JSON.
-    if (variant is _EnumConstantVariant<E>) {
+    if (variant is _EnumConstantVariant<E> ||
+        variant is _EnumUnknownVariant<E>) {
       {
         final nameUpper = variant.name.toUpperCase();
         if (nameUpper != variant.name) nameToVariant[nameUpper] = variant;
