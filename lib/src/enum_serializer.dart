@@ -472,7 +472,7 @@ class _EnumUnknownVariant<E> extends _EnumVariant<E>
   @override
   dynamic toJson(E input, bool readableFlavor) {
     if (readableFlavor) {
-      return 'UNKNOWN';
+      return 'unknown';
     } else {
       final unrecognized = getUnrecognized(input);
       return unrecognized?._jsonElement ?? 0;
