@@ -1,17 +1,17 @@
 part of "../skir_client.dart";
 
 /// Specialization of a [Serializer] for generated enum types.
-class EnumSerializer<Enum> extends Serializer<Enum> {
-  EnumSerializer._(_EnumSerializerImpl<Enum> super.impl) : super._();
+class EnumSerializer<E> extends Serializer<E> {
+  EnumSerializer._(_EnumSerializerImpl<E> super.impl) : super._();
 
   @override
-  ReflectiveEnumDescriptor<Enum> get typeDescriptor =>
-      super._impl as _EnumSerializerImpl<Enum>;
+  ReflectiveEnumDescriptor<E> get typeDescriptor =>
+      super._impl as _EnumSerializerImpl<E>;
 }
 
-class internal__EnumSerializerBuilder<Enum> {
-  final _EnumSerializerImpl<Enum> _impl;
-  final EnumSerializer<Enum> serializer;
+class internal__EnumSerializerBuilder<E> {
+  final _EnumSerializerImpl<E> _impl;
+  final EnumSerializer<E> serializer;
   bool _initialized = false;
 
   internal__EnumSerializerBuilder._(this._impl, this.serializer);
@@ -61,12 +61,12 @@ class internal__EnumSerializerBuilder<Enum> {
     String name,
     String dartName,
     String doc,
-    Enum instance,
+    E instance,
   ) {
     _impl.addConstantVariant(number, name, dartName, doc, instance);
   }
 
-  void addWrapperVariant<Wrapper extends Enum, Value>(
+  void addWrapperVariant<Wrapper extends E, Value>(
     int number,
     String name,
     String dartName,
