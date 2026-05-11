@@ -16,14 +16,13 @@ class internal__EnumSerializerBuilder<E> {
 
   internal__EnumSerializerBuilder._(this._impl, this.serializer);
 
-  static internal__EnumSerializerBuilder<Enum>
-      create<Enum, Unknown extends Enum>({
+  static internal__EnumSerializerBuilder<E> create<E, Unknown extends E>({
     required String recordId,
     required String doc,
     required Unknown unknownInstance,
-    required Enum enumInstance, // For type inference, not used at runtime
-    required int Function(Enum) getOrdinal,
-    required Enum Function(internal__UnrecognizedVariant) wrapUnrecognized,
+    required E enumInstance, // For type inference, not used at runtime
+    required int Function(E) getOrdinal,
+    required E Function(internal__UnrecognizedVariant) wrapUnrecognized,
     required internal__UnrecognizedVariant? Function(Unknown) getUnrecognized,
   }) {
     final String dartClassName = _RecordId.parse(
@@ -33,15 +32,15 @@ class internal__EnumSerializerBuilder<E> {
       recordId,
       doc,
       dartClassName,
-      _EnumUnknownVariant<Enum>(
+      _EnumUnknownVariant<E>(
         unknownInstance,
         wrapUnrecognized,
-        (Enum e) => e is Unknown ? getUnrecognized(e) : null,
+        (E e) => e is Unknown ? getUnrecognized(e) : null,
         "$dartClassName.unknown",
       ),
       getOrdinal,
     );
-    return internal__EnumSerializerBuilder<Enum>._(
+    return internal__EnumSerializerBuilder<E>._(
       impl,
       EnumSerializer._(impl),
     );

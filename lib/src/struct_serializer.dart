@@ -157,9 +157,8 @@ class _StructSerializerImpl<Frozen, Mutable>
 
   final List<_StructFieldImpl<Frozen, Mutable, dynamic>> _mutableFields = [];
   final Set<int> _mutableRemovedNumbers = <int>{};
-  @override
-  final Map<String, _StructFieldImpl<Frozen, Mutable, dynamic>> _nameToField =
-      {};
+  final Map<String, _StructFieldImpl<Frozen, Mutable, dynamic>>
+      _nameToMutableField = {};
   int _maxRemovedNumber = -1;
   // Number of slots including removed fields.
   int _slotCountInclRemoved = 0;
@@ -209,7 +208,7 @@ class _StructSerializerImpl<Frozen, Mutable>
       setter,
     );
     _mutableFields.add(field);
-    _nameToField[field.name] = field;
+    _nameToMutableField[field.name] = field;
   }
 
   void addRemovedNumber(int number) {
@@ -350,7 +349,8 @@ class _StructSerializerImpl<Frozen, Mutable>
   Frozen _fromReadableJson(Map<String, dynamic> jsonObject) {
     final mutable = newMutableFn(null);
     for (final entry in jsonObject.entries) {
-      _nameToField[entry.key]?.valueFromJson(mutable, entry.value, false);
+      _nameToMutableField[entry.key]
+          ?.valueFromJson(mutable, entry.value, false);
     }
     return toFrozenFn(mutable);
   }
@@ -492,7 +492,7 @@ class _StructSerializerImpl<Frozen, Mutable>
 
   @override
   _StructFieldImpl<Frozen, Mutable, dynamic>? getFieldByName(String name) {
-    return _nameToField[name];
+    return _nameToMutableField[name];
   }
 
   @override
