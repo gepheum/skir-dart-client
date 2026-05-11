@@ -4,7 +4,7 @@ sealed class _FrozenList<E> implements List<E> {}
 
 class _FrozenListImpl<E> extends UnmodifiableListView<E>
     implements _FrozenList<E> {
-  _FrozenListImpl(List<E> list) : super(list);
+  _FrozenListImpl(List<E> super.list);
 
   @override
   bool operator ==(Object other) => _equalsImpl(this, other);
@@ -46,8 +46,7 @@ class _KeyedIterableImpl<E, K> extends UnmodifiableListView<E>
   final K Function(E) _getKey;
   Map<K, E>? _mapView;
 
-  _KeyedIterableImpl(List<E> list, this._getKeySpec, this._getKey)
-      : super(list);
+  _KeyedIterableImpl(List<E> super.list, this._getKeySpec, this._getKey);
 
   @override
   E? findByKey(K key) {

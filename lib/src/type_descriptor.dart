@@ -14,9 +14,11 @@ abstract class _TypeDescriptorBase {
 /// runtime; for this, you have to use [ReflectiveTypeDescriptor].
 sealed class TypeDescriptor implements _TypeDescriptorBase {
   /// Returns the JSON representation of this type descriptor.
+  @override
   Map<String, dynamic> get asJson => _typeDescriptorAsJsonImpl(this);
 
   /// Returns the stringified JSON representation of this type descriptor.
+  @override
   String get asJsonCode => _typeDescriptorAsJsonCodeImpl(this);
 
   /// Parses a type descriptor from its JSON representation, as returned by
@@ -45,9 +47,11 @@ sealed class ReflectiveTypeDescriptor<T> implements _TypeDescriptorBase {
   TypeDescriptor get notReflective => _notReflectiveImpl(this);
 
   /// Returns the JSON representation of this type descriptor.
+  @override
   Map<String, dynamic> get asJson => notReflective.asJson;
 
   /// Returns the stringified JSON representation of this type descriptor.
+  @override
   String get asJsonCode => notReflective.asJsonCode;
 
   T get defaultValue;
@@ -85,6 +89,7 @@ sealed class PrimitiveDescriptor<T> extends TypeDescriptor
 
   @override
   PrimitiveDescriptor get notReflective => this;
+  @override
   void accept(ReflectiveTypeVisitor<T> visitor) {
     _acceptImpl(this, visitor);
   }
@@ -94,6 +99,7 @@ sealed class PrimitiveDescriptor<T> extends TypeDescriptor
 class BoolDescriptor extends PrimitiveDescriptor<bool> {
   static final instance = BoolDescriptor._();
 
+  @override
   bool get defaultValue => false;
 
   BoolDescriptor._() : super._(PrimitiveType.bool);
@@ -103,6 +109,7 @@ class BoolDescriptor extends PrimitiveDescriptor<bool> {
 class Int32Descriptor extends PrimitiveDescriptor<int> {
   static final instance = Int32Descriptor._();
 
+  @override
   int get defaultValue => 0;
 
   Int32Descriptor._() : super._(PrimitiveType.int32);
@@ -112,6 +119,7 @@ class Int32Descriptor extends PrimitiveDescriptor<int> {
 class Int64Descriptor extends PrimitiveDescriptor<int> {
   static final instance = Int64Descriptor._();
 
+  @override
   int get defaultValue => 0;
 
   Int64Descriptor._() : super._(PrimitiveType.int64);
@@ -121,6 +129,7 @@ class Int64Descriptor extends PrimitiveDescriptor<int> {
 class Hash64Descriptor extends PrimitiveDescriptor<BigInt> {
   static final instance = Hash64Descriptor._();
 
+  @override
   BigInt get defaultValue => BigInt.zero;
 
   Hash64Descriptor._() : super._(PrimitiveType.hash64);
@@ -130,6 +139,7 @@ class Hash64Descriptor extends PrimitiveDescriptor<BigInt> {
 class Float32Descriptor extends PrimitiveDescriptor<double> {
   static final instance = Float32Descriptor._();
 
+  @override
   double get defaultValue => 0.0;
 
   Float32Descriptor._() : super._(PrimitiveType.float32);
@@ -139,6 +149,7 @@ class Float32Descriptor extends PrimitiveDescriptor<double> {
 class Float64Descriptor extends PrimitiveDescriptor<double> {
   static final instance = Float64Descriptor._();
 
+  @override
   double get defaultValue => 0.0;
 
   Float64Descriptor._() : super._(PrimitiveType.float64);
@@ -148,6 +159,7 @@ class Float64Descriptor extends PrimitiveDescriptor<double> {
 class TimestampDescriptor extends PrimitiveDescriptor<DateTime> {
   static final instance = TimestampDescriptor._();
 
+  @override
   DateTime get defaultValue => unixEpoch;
 
   TimestampDescriptor._() : super._(PrimitiveType.timestamp);
@@ -157,6 +169,7 @@ class TimestampDescriptor extends PrimitiveDescriptor<DateTime> {
 class StringDescriptor extends PrimitiveDescriptor<String> {
   static final instance = StringDescriptor._();
 
+  @override
   String get defaultValue => '';
 
   StringDescriptor._() : super._(PrimitiveType.string);
@@ -166,6 +179,7 @@ class StringDescriptor extends PrimitiveDescriptor<String> {
 class BytesDescriptor extends PrimitiveDescriptor<ByteString> {
   static final instance = BytesDescriptor._();
 
+  @override
   ByteString get defaultValue => ByteString.empty;
 
   BytesDescriptor._() : super._(PrimitiveType.bytes);
@@ -233,8 +247,10 @@ class ArrayDescriptor extends TypeDescriptor
 abstract class ReflectiveArrayDescriptor<E, Collection extends Iterable<E>>
     extends ReflectiveTypeDescriptor<Collection>
     implements _ArrayDescriptorBase<ReflectiveTypeDescriptor<E>> {
+  @override
   ReflectiveTypeDescriptor<E> get itemType;
 
+  @override
   String? get keyExtractor;
 
   Collection toCollection(Iterable<E> iterable);

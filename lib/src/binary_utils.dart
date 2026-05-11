@@ -173,7 +173,7 @@ class _BinaryWriter {
       buffer.add(233 & 0xFF);
       writeIntLe(length, buffer);
     } else {
-      throw ArgumentError("Length overflow: ${length}");
+      throw ArgumentError("Length overflow: $length");
     }
   }
 

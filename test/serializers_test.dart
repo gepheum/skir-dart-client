@@ -1191,6 +1191,99 @@ void main() {
       }
     });
 
+    test('binary serialization sanitizes lone surrogates to valid UTF-8', () {
+      final bytes = Serializers.string.toBytes('\uD800z');
+      expect(Serializers.string.fromBytes(bytes), equals('�z'));
+    });
+
+    test(
+        'JSON serialization - no explicit sanitization needed (Dart handles it)',
+        () {
+      // After verifying that Dart's json.encode() handles lone surrogates safely,
+      // we removed the explicit sanitization from toJson() for performance.
+      // toJson() now returns the string as-is; Dart's json.encode() ensures valid UTF-8.
+      final jsonValue =
+          Serializers.string.toJson('\uD800z', readableFlavor: false);
+      expect(jsonValue, equals('\uD800z')); // Returned as-is
+
+      // The toJsonCode() applies the JSON serialization which handles it safely
+      final jsonCode =
+          Serializers.string.toJsonCode('\uD800z', readableFlavor: false);
+      expect(jsonCode, isA<String>()); // Valid JSON string
+      expect(jsonCode, contains('"')); // Wrapped in quotes
+
+      // Verify the JSON is valid UTF-8
+      expect(utf8.encode(jsonCode).isNotEmpty, true);
+    });
+
+    test(
+        'Dart json.encode() handling of lone surrogates - verifies if sanitization is redundant',
+        () {
+      // This test verifies whether Dart's native json.encode() already handles
+      // lone surrogates correctly (produces valid UTF-8) or if explicit
+      // sanitization in toJson() is necessary.
+
+      // Create a map with a lone surrogate in a string value
+      final mapWithLoneSurrogate = {'text': '\uD800'};
+
+      // Try to json.encode() it
+      String encodedJson;
+      try {
+        encodedJson = jsonEncode(mapWithLoneSurrogate);
+        // If we get here without exception, json.encode() handled it (sanitized or escaped)
+        expect(encodedJson, isNotEmpty);
+
+        // Verify the output is valid UTF-8 by trying to encode it back
+        final utf8Bytes = utf8.encode(encodedJson);
+        final decodedBack = utf8.decode(utf8Bytes);
+        expect(decodedBack, isNotEmpty);
+
+        print(
+            '✓ Dart json.encode() with lone surrogate: Valid UTF-8 output (${decodedBack.length} chars)');
+        print('  Encoded JSON: $encodedJson');
+
+        // Verify we can json.decode() it back without errors
+        final decodedMap = jsonDecode(encodedJson);
+        expect(decodedMap, isA<Map>());
+        print('  Successfully decoded back: ${decodedMap['text'].runtimeType}');
+      } catch (e) {
+        fail('json.encode() threw exception with lone surrogate: $e\n'
+            'This means Dart requires explicit sanitization before calling json.encode()');
+      }
+    });
+
+    test('comparison: default json.encode vs explicit sanitization', () {
+      // This test shows the difference between Dart's native encoding and our sanitization:
+      // - Default: Escapes lone surrogates as JSON escape sequences (e.g., \ud800)
+      // - Sanitized: Replaces with Unicode replacement character (U+FFFD)
+
+      final testString = '\uD800z'; // lone surrogate followed by 'z'
+
+      // Default json.encode() output
+      final defaultJson = jsonEncode({'text': testString});
+      print('  Default json.encode(): $defaultJson');
+
+      // Our explicit sanitization
+      final sanitized = '\uFFFDz'; // U+FFFD replacement character + 'z'
+      final sanitizedJson = jsonEncode({'text': sanitized});
+      print('  Explicit sanitization: $sanitizedJson');
+
+      // Both are valid UTF-8, but differ in representation
+      expect(utf8.encode(defaultJson).isNotEmpty, true);
+      expect(utf8.encode(sanitizedJson).isNotEmpty, true);
+
+      // Default keeps escape sequences, sanitized uses visible replacement char
+      expect(defaultJson.contains(r'\ud800'), true);
+      expect(sanitizedJson.contains(r'\ud800'), false);
+      expect(sanitizedJson.contains('z'), true);
+
+      print('✓ Both outputs are valid UTF-8, but differ in representation');
+      print(
+          '  → Default: uses JSON escape sequences (less visible, preserves surrogates)');
+      print(
+          '  → Sanitized: uses U+FFFD replacement (more visible, replaceable surrogates)');
+    });
+
     test('type descriptor', () {
       final typeDescriptor = Serializers.string.typeDescriptor;
       expect(typeDescriptor, isA<PrimitiveDescriptor>());

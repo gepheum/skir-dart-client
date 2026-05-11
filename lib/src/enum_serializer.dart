@@ -2,7 +2,7 @@ part of "../skir_client.dart";
 
 /// Specialization of a [Serializer] for generated enum types.
 class EnumSerializer<Enum> extends Serializer<Enum> {
-  EnumSerializer._(_EnumSerializerImpl<Enum> impl) : super._(impl);
+  EnumSerializer._(_EnumSerializerImpl<Enum> super.impl) : super._();
 
   @override
   ReflectiveEnumDescriptor<Enum> get typeDescriptor =>
@@ -37,7 +37,7 @@ class internal__EnumSerializerBuilder<Enum> {
         unknownInstance,
         wrapUnrecognized,
         (Enum e) => e is Unknown ? getUnrecognized(e) : null,
-        "${dartClassName}.unknown",
+        "$dartClassName.unknown",
       ),
       getOrdinal,
     );
@@ -134,7 +134,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
   ) {
     checkNotFinalized();
     final ordinal = getOrdinal(instance);
-    final asString = '${dartClassName}.${dartName}';
+    final asString = '$dartClassName.$dartName';
     addVariantImpl(
       ordinal: ordinal,
       variant: _EnumConstantVariant<E>(number, name, doc, instance, asString),
@@ -152,7 +152,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
     required int ordinal,
   }) {
     checkNotFinalized();
-    final wrapFunctionName = '${dartClassName}.${dartName}';
+    final wrapFunctionName = '$dartClassName.$dartName';
     addVariantImpl(
       ordinal: ordinal,
       variant: _WrapperVariant<E, W, V>(
@@ -467,6 +467,7 @@ class _EnumUnknownVariant<E> extends _EnumVariant<E>
   @override
   int get number => 0;
 
+  @override
   ReflectiveEnumVariant<E> get asVariant => this;
 
   @override
@@ -513,6 +514,7 @@ class _EnumConstantVariant<E> extends _EnumVariant<E>
     this.asString,
   ) : super(name);
 
+  @override
   ReflectiveEnumVariant<E> get asVariant => this;
 
   @override
@@ -553,6 +555,7 @@ class _WrapperVariant<E, W extends E, V> extends _EnumVariant<E>
     this.wrapFunctionName,
   ) : super(name);
 
+  @override
   ReflectiveEnumVariant<E> get asVariant => this;
 
   @override
@@ -584,7 +587,7 @@ class _WrapperVariant<E, W extends E, V> extends _EnumVariant<E>
   @override
   void appendString(E input, StringBuffer out, String eolIndent) {
     final newEolIndent = eolIndent + _indentUnit;
-    out.write("${wrapFunctionName}($newEolIndent");
+    out.write("$wrapFunctionName($newEolIndent");
     final value = getValue(input as W);
     valueSerializer._impl.appendString(value, out, newEolIndent);
     out.write("$eolIndent)");

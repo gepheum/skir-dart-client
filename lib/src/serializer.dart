@@ -94,7 +94,7 @@ class Serializer<T> {
       if (extraBytes != 0) {
         throw FormatException(
           'Extra bytes found after deserializing value: '
-          '${extraBytes} bytes remaining.',
+          '$extraBytes bytes remaining.',
         );
       }
       return result;

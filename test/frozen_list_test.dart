@@ -589,7 +589,7 @@ void main() {
 
       test('optimization with function reference equality', () {
         final elements = ['apple', 'banana', 'cherry'];
-        String Function(String) keyFunction = (e) => e.length.toString();
+        String keyFunction(String e) => e.length.toString();
 
         final original = internal__keyedCopy(
           elements,
@@ -934,7 +934,7 @@ void main() {
         expect(frozenList == {'apple', 'banana'}, isFalse);
 
         // Test null comparison by explicitly casting
-        dynamic nullValue = null;
+        dynamic nullValue;
         expect(frozenList == nullValue, isFalse);
       });
 
@@ -1289,7 +1289,7 @@ class AgeGroup {
 class PersonData extends Person {
   final bool isAdult;
 
-  PersonData(String name, int age, this.isAdult) : super(name, age);
+  PersonData(super.name, super.age, this.isAdult);
 
   @override
   String toString() => 'PersonData($name, $age, isAdult: $isAdult)';

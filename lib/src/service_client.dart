@@ -156,6 +156,6 @@ class RemoteMethodWrapper<Request, Response> {
     Map<String, String> headers = const {},
     Duration? timeout,
   }) {
-    return _client._invokeImpl(this._method, request, headers, timeout);
+    return _client._invokeImpl(_method, request, headers, timeout);
   }
 }

@@ -24,7 +24,8 @@ class _IterableSerializer<E, Collection extends Iterable<E>>
     String? getKeySpec,
     K Function(E) getKey,
   ) {
-    final toCollection = (Iterable<E> it) => KeyedIterable.copy(it, getKey);
+    KeyedIterable<E, K> toCollection(Iterable<E> it) =>
+        KeyedIterable.copy(it, getKey);
     return _IterableSerializer<E, KeyedIterable<E, K>>(
       item,
       getKeySpec,

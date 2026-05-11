@@ -1,4 +1,4 @@
-library skir_client;
+library;
 
 import 'dart:convert';
 import 'dart:io';

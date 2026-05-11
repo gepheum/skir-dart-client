@@ -340,7 +340,7 @@ class _StringSerializer extends _PrimitiveSerializer<String> {
       buffer.add(242);
     } else {
       buffer.add(243);
-      final bytes = utf8.encode(input);
+      final bytes = utf8.encode(_sanitizeForUtf8(input));
       _BinaryWriter.encodeLengthPrefix(bytes.length, buffer);
       buffer.addAll(bytes);
     }
@@ -418,6 +418,43 @@ class _StringSerializer extends _PrimitiveSerializer<String> {
   @override
   ReflectiveTypeDescriptor<String> get typeDescriptor =>
       StringDescriptor.instance;
+
+  // Replace malformed surrogate code units with U+FFFD while preserving valid pairs.
+  String _sanitizeForUtf8(String input) {
+    StringBuffer? out;
+    int i = 0;
+    while (i < input.length) {
+      final cu = input.codeUnitAt(i);
+      if (cu >= 0xD800 && cu <= 0xDBFF) {
+        if (i + 1 < input.length) {
+          final next = input.codeUnitAt(i + 1);
+          if (next >= 0xDC00 && next <= 0xDFFF) {
+            if (out != null) {
+              out.writeCharCode(cu);
+              out.writeCharCode(next);
+            }
+            i += 2;
+            continue;
+          }
+        }
+        out ??= StringBuffer()..write(input.substring(0, i));
+        out.write('\uFFFD');
+        i++;
+        continue;
+      }
+      if (cu >= 0xDC00 && cu <= 0xDFFF) {
+        out ??= StringBuffer()..write(input.substring(0, i));
+        out.write('\uFFFD');
+        i++;
+        continue;
+      }
+      if (out != null) {
+        out.writeCharCode(cu);
+      }
+      i++;
+    }
+    return out?.toString() ?? input;
+  }
 }
 
 class _BytesSerializer extends _PrimitiveSerializer<ByteString> {

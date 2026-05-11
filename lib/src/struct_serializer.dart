@@ -2,8 +2,8 @@ part of "../skir_client.dart";
 
 /// Specialization of a [Serializer] for generated struct types.
 class StructSerializer<Frozen, Mutable> extends Serializer<Frozen> {
-  StructSerializer._(_StructSerializerImpl<Frozen, Mutable> impl)
-      : super._(impl);
+  StructSerializer._(_StructSerializerImpl<Frozen, Mutable> super.impl)
+      : super._();
 
   @override
   ReflectiveStructDescriptor<Frozen, Mutable> get typeDescriptor =>
@@ -157,6 +157,7 @@ class _StructSerializerImpl<Frozen, Mutable>
 
   final List<_StructFieldImpl<Frozen, Mutable, dynamic>> _mutableFields = [];
   final Set<int> _mutableRemovedNumbers = <int>{};
+  @override
   final Map<String, _StructFieldImpl<Frozen, Mutable, dynamic>> _nameToField =
       {};
   int _maxRemovedNumber = -1;

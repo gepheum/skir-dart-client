@@ -3,7 +3,7 @@ part of "../skir_client.dart";
 /// Provides serializers for all primitive types and utilities for creating
 /// composite serializers such as optional and iterable serializers.
 class Serializers {
-  Serializers._() {}
+  Serializers._();
 
   /// Serializer for 32-bit signed integers.
   static final Serializer<int> int32 = Serializer._(_Int32Serializer());
@@ -53,7 +53,7 @@ class Serializers {
   static Serializer<KeyedIterable<E, K>> keyedIterable<E, K>(
     Serializer<E> item,
     K Function(E) getKey, {
-    String? internal__getKeySpec = null,
+    String? internal__getKeySpec,
   }) {
     return Serializer._(
       _IterableSerializer.keyedIterable(

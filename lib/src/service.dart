@@ -266,7 +266,7 @@ class ServiceOptions<RequestMeta> {
 
   static void _defaultErrorLogger<MethodErrorInfo>(errorInfo) {
     final methodName = errorInfo.method.name;
-    stderr.writeln('Error in method ${methodName}: ${errorInfo.error}');
+    stderr.writeln('Error in method $methodName: ${errorInfo.error}');
   }
 }
 
@@ -293,7 +293,7 @@ abstract class RequestHandler<RequestMeta> {
 /// HTTP server using the Shelf framework.
 class Service<RequestMeta> implements RequestHandler<RequestMeta> {
   final Map<int, _MethodImpl<dynamic, dynamic, RequestMeta>> _methodImpls;
-  final options = new ServiceOptions<RequestMeta>();
+  final options = ServiceOptions<RequestMeta>();
 
   Service() : _methodImpls = {};
 
@@ -321,6 +321,7 @@ class Service<RequestMeta> implements RequestHandler<RequestMeta> {
   /// If the request is a GET request, pass in the decoded query string as the
   /// request's body. The query string is the part of the URL after '?', and it
   /// can be decoded with [Uri.decodeComponent].
+  @override
   Future<RawResponse> handleRequest(
     String requestBody,
     RequestMeta requestMeta,
