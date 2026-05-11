@@ -28,32 +28,32 @@ class ColorUnknown extends Color {
   final internal__UnrecognizedVariant? unrecognized;
   const ColorUnknown(this.unrecognized);
   @override
-  get kind => ColorKind.unknown;
+  ColorKind get kind => ColorKind.unknown;
 }
 
 class ColorRed extends Color {
   const ColorRed();
   @override
-  get kind => ColorKind.red;
+  ColorKind get kind => ColorKind.red;
 }
 
 class ColorGreen extends Color {
   const ColorGreen();
   @override
-  get kind => ColorKind.green;
+  ColorKind get kind => ColorKind.green;
 }
 
 class ColorBlue extends Color {
   const ColorBlue();
   @override
-  get kind => ColorKind.blue;
+  ColorKind get kind => ColorKind.blue;
 }
 
 class ColorCustomOption extends Color {
   final int rgb;
   const ColorCustomOption(this.rgb);
   @override
-  get kind => ColorKind.custom;
+  ColorKind get kind => ColorKind.custom;
 }
 
 // Complex enum with both constants and wrapper fields
@@ -78,33 +78,33 @@ class StatusUnknown extends Status {
   final internal__UnrecognizedVariant? unrecognized;
   const StatusUnknown(this.unrecognized);
   @override
-  get kind => StatusKind.unknown;
+  StatusKind get kind => StatusKind.unknown;
 }
 
 class StatusActive extends Status {
   const StatusActive();
   @override
-  get kind => StatusKind.active;
+  StatusKind get kind => StatusKind.active;
 }
 
 class StatusInactive extends Status {
   const StatusInactive();
   @override
-  get kind => StatusKind.inactive;
+  StatusKind get kind => StatusKind.inactive;
 }
 
 class StatusPendingOption extends Status {
   final String reason;
   const StatusPendingOption(this.reason);
   @override
-  get kind => StatusKind.pending;
+  StatusKind get kind => StatusKind.pending;
 }
 
 class StatusErrorOption extends Status {
   final String message;
   const StatusErrorOption(this.message);
   @override
-  get kind => StatusKind.error;
+  StatusKind get kind => StatusKind.error;
 }
 
 void main() {
