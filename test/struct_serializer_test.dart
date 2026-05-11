@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
 
@@ -86,7 +87,7 @@ void main() {
           age: frozen?.age ?? 0,
           email: frozen?.email,
           isActive: frozen?.isActive ?? false,
-          tags: List.from(frozen?.tags ?? []),
+          tags: List.from(frozen?.tags ?? <dynamic>[]),
           unrecognizedFields: frozen?.unrecognizedFields,
         ),
         toFrozen: (mutable) => PersonFrozen(
@@ -191,7 +192,7 @@ void main() {
       final denseJson = personSerializer.toJson(person, readableFlavor: false);
       expect(denseJson, isA<List>());
 
-      final jsonArray = denseJson as List;
+      final jsonArray = denseJson as List<dynamic>;
       expect(jsonArray[0], equals('Alice'));
       expect(jsonArray[1], equals(30));
       expect(jsonArray[2], equals('alice@example.com'));
@@ -362,7 +363,7 @@ void main() {
           age: frozen?.age ?? 0,
           email: frozen?.email,
           isActive: frozen?.isActive ?? false,
-          tags: List.from(frozen?.tags ?? []),
+          tags: List.from(frozen?.tags ?? <dynamic>[]),
           unrecognizedFields: frozen?.unrecognizedFields,
         ),
         toFrozen: (mutable) => PersonFrozen(
@@ -409,7 +410,7 @@ void main() {
           age: frozen?.age ?? 0,
           email: frozen?.email,
           isActive: frozen?.isActive ?? false,
-          tags: List.from(frozen?.tags ?? []),
+          tags: List.from(frozen?.tags ?? <dynamic>[]),
           unrecognizedFields: frozen?.unrecognizedFields,
         ),
         toFrozen: (mutable) => PersonFrozen(

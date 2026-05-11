@@ -133,12 +133,12 @@ KeyedIterable<E, K> internal__keyedMappedCopy<E extends M, K, M>(
   }
 }
 
-bool _equalsImpl(_FrozenList a, Object b) {
+bool _equalsImpl(_FrozenList<dynamic> a, Object b) {
   if (identical(a, b)) return true;
-  if (b is! _FrozenList) return false;
+  if (b is! _FrozenList<dynamic>) return false;
   return internal__listEquality.equals(a, b);
 }
 
-int _hashCodeImpl(_FrozenList list) {
+int _hashCodeImpl(_FrozenList<dynamic> list) {
   return internal__listEquality.hash(list);
 }

@@ -205,7 +205,7 @@ class MethodErrorInfo<RequestMeta> {
   dynamic error;
 
   /// The method that was being executed when the error occurred.
-  Method method;
+  Method<dynamic, dynamic> method;
 
   /// Parsed request passed to the method's implementation.
   dynamic request;
@@ -254,7 +254,8 @@ class ServiceOptions<RequestMeta> {
   ///
   /// Defaults to a function which prints the method name and error message to
   /// stderr.
-  void Function(MethodErrorInfo<RequestMeta>) errorLogger = _defaultErrorLogger;
+  void Function(MethodErrorInfo<RequestMeta>) errorLogger =
+      _defaultErrorLogger<RequestMeta>;
 
   /// URL to the JavaScript file for the Skir Studio app.
   ///
@@ -264,7 +265,8 @@ class ServiceOptions<RequestMeta> {
   String studioAppJsUrl =
       'https://cdn.jsdelivr.net/npm/skir-studio/dist/skir-studio-standalone.js';
 
-  static void _defaultErrorLogger<MethodErrorInfo>(errorInfo) {
+  static void _defaultErrorLogger<RequestMeta>(
+      MethodErrorInfo<RequestMeta> errorInfo) {
     final methodName = errorInfo.method.name;
     stderr.writeln('Error in method $methodName: ${errorInfo.error}');
   }

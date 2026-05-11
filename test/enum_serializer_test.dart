@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
 import 'dart:typed_data';
@@ -276,7 +277,7 @@ void main() {
       );
       expect(customJson, isA<List>());
 
-      final jsonArray = customJson as List;
+      final jsonArray = customJson as List<dynamic>;
       expect(jsonArray, hasLength(2));
       expect(jsonArray[0], equals(4));
       expect(jsonArray[1], equals(16711680)); // 0xFF0000 in decimal

@@ -238,17 +238,17 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
   @override
   E fromJson(dynamic json, bool keepUnrecognizedValues) {
     if (json is int || (json is String && int.tryParse(json) != null)) {
-      final number = json is int ? json : int.parse(json);
+      final number = json is int ? json : int.parse(json as String);
       final variant = numberToVariant[number];
       switch (variant) {
-        case _EnumUnknownVariant():
+        case _EnumUnknownVariant<E>():
           return unknown.constant;
-        case _EnumConstantVariant():
-          return variant.constant;
-        case _EnumRemovedNumber():
+        case final _EnumConstantVariant<E> v:
+          return v.constant;
+        case _EnumRemovedNumber<E>():
           return unknown.constant;
-        case _WrapperVariant():
-          return variant.wrapDefault();
+        case final _WrapperVariant<E, E, dynamic> v:
+          return v.wrapDefault();
         default:
           if (keepUnrecognizedValues) {
             return unknown.wrapUnrecognized(
@@ -262,7 +262,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
       final variant = nameToVariant[json];
       if (variant is _EnumConstantVariant<E>) {
         return variant.constant;
-      } else if (variant is _WrapperVariant<E, dynamic, dynamic>) {
+      } else if (variant is _WrapperVariant<E, E, dynamic>) {
         return variant.wrapDefault();
       } else {
         return unknown.constant;
@@ -273,7 +273,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
           first is int ? first : (first is String ? int.tryParse(first) : null);
       if (number != null) {
         final variant = numberToVariant[number];
-        if (variant is _WrapperVariant<E, dynamic, dynamic>) {
+        if (variant is _WrapperVariant<E, E, dynamic>) {
           final second = json[1];
           return variant.wrapFromJson(second, keepUnrecognizedValues);
         } else if (variant is _EnumConstantVariant<E>) {
@@ -295,7 +295,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
       final value = json['value'];
       if (name != null && value != null) {
         final variant = nameToVariant[name];
-        if (variant is _WrapperVariant<E, dynamic, dynamic>) {
+        if (variant is _WrapperVariant<E, E, dynamic>) {
           return variant.wrapFromJson(value, keepUnrecognizedValues);
         }
       }
@@ -328,12 +328,12 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
       final variant = numberToVariant[number];
 
       switch (variant) {
-        case _EnumConstantVariant():
-          result = variant.constant;
-        case _EnumRemovedNumber():
+        case final _EnumConstantVariant<E> v:
+          result = v.constant;
+        case _EnumRemovedNumber<E>():
           result = unknown.constant;
-        case _WrapperVariant():
-          result = variant.wrapDefault();
+        case final _WrapperVariant<E, E, dynamic> v:
+          result = v.wrapDefault();
         default:
           {
             if (keepUnrecognizedValues) {
@@ -355,7 +355,7 @@ class _EnumSerializerImpl<E> extends ReflectiveEnumDescriptor<E>
       final number = wire == 248 ? stream.decodeNumber().toInt() : wire - 250;
       final variant = numberToVariant[number];
 
-      if (variant is _WrapperVariant<E, dynamic, dynamic>) {
+      if (variant is _WrapperVariant<E, E, dynamic>) {
         result = variant.wrapDecoded(stream, keepUnrecognizedValues);
       } else if (variant is _EnumConstantVariant<E>) {
         stream.decodeUnused();

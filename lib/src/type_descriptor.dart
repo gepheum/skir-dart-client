@@ -88,7 +88,7 @@ sealed class PrimitiveDescriptor<T> extends TypeDescriptor
   PrimitiveDescriptor._(this.primitiveType);
 
   @override
-  PrimitiveDescriptor get notReflective => this;
+  PrimitiveDescriptor<T> get notReflective => this;
   @override
   void accept(ReflectiveTypeVisitor<T> visitor) {
     _acceptImpl(this, visitor);
@@ -654,8 +654,8 @@ abstract class ReflectiveEnumDescriptor<E> extends ReflectiveRecordDescriptor<E>
 
 /// 🪞 Converts a reflective type descriptor to a non-reflective one.
 TypeDescriptor _notReflectiveImpl(
-  ReflectiveTypeDescriptor reflective, [
-  Map<ReflectiveTypeDescriptor, TypeDescriptor>? inProgress,
+  ReflectiveTypeDescriptor<dynamic> reflective, [
+  Map<ReflectiveTypeDescriptor<dynamic>, TypeDescriptor>? inProgress,
 ]) {
   inProgress ??= {};
   {

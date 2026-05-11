@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
 

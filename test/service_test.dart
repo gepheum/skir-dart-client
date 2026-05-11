@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
 
@@ -76,7 +77,7 @@ void main() {
 
   group('ServiceBuilder', () {
     test('prevents duplicate method numbers', () {
-      final builder = Service();
+      final builder = Service<Map<String, dynamic>>();
 
       // Create a mock method
       final method1 = Method<String, String>(
@@ -104,7 +105,7 @@ void main() {
     });
 
     test('allows different method numbers', () {
-      final builder = Service();
+      final builder = Service<Map<String, dynamic>>();
 
       final method1 = Method<String, String>(
         'test1',
@@ -141,7 +142,7 @@ void main() {
         "doc text",
       );
 
-      service = Service();
+      service = Service<Map<String, dynamic>>();
       service.addMethod(method, (request, meta) async => 'echo: $request');
     });
 

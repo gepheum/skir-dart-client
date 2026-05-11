@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
 import 'dart:typed_data';
@@ -875,7 +876,7 @@ void main() {
         readableFlavor: true,
       );
       expect(epochReadable, isA<Map>());
-      final epochMap = epochReadable as Map;
+      final epochMap = epochReadable as Map<dynamic, dynamic>;
       expect(epochMap['unix_millis'], equals(0));
       expect(epochMap['formatted'], equals('1970-01-01T00:00:00.000Z'));
 
@@ -925,8 +926,8 @@ void main() {
       expect(readableJson, contains('2025-08-25T10:30:45'));
 
       // Parse the JSON to verify structure
-      final readableObj =
-          Serializers.timestamp.toJson(testTime, readableFlavor: true) as Map;
+      final readableObj = Serializers.timestamp
+          .toJson(testTime, readableFlavor: true) as Map<dynamic, dynamic>;
       expect(readableObj['unix_millis'], equals(1756117845000));
       expect(readableObj['formatted'], equals('2025-08-25T10:30:45.000Z'));
 

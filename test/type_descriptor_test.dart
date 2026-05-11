@@ -1,3 +1,4 @@
+// ignore_for_file: strict_raw_type, inference_failure_on_collection_literal
 import 'dart:convert';
 import 'package:test/test.dart';
 import 'package:skir_client/skir_client.dart';
@@ -60,7 +61,7 @@ void main() {
 
       expect(json, isA<Map<String, dynamic>>());
       final jsonMap = json;
-      expect(jsonMap['records'] ?? [], isEmpty);
+      expect(jsonMap['records'] ?? <dynamic>[], isEmpty);
       expect(jsonMap['type'], isA<Map<String, dynamic>>());
 
       final typeMap = jsonMap['type'] as Map<String, dynamic>;
@@ -82,7 +83,7 @@ void main() {
 
       expect(json, isA<Map<String, dynamic>>());
       final jsonMap = json;
-      expect(jsonMap['records'] ?? [], isEmpty);
+      expect(jsonMap['records'] ?? <dynamic>[], isEmpty);
       expect(jsonMap['type'], isA<Map<String, dynamic>>());
 
       final typeMap = jsonMap['type'] as Map<String, dynamic>;
@@ -120,7 +121,7 @@ void main() {
 
       expect(json, isA<Map<String, dynamic>>());
       final jsonMap = json;
-      expect(jsonMap['records'] ?? [], isEmpty);
+      expect(jsonMap['records'] ?? <dynamic>[], isEmpty);
       expect(jsonMap['type'], isA<Map<String, dynamic>>());
 
       final typeMap = jsonMap['type'] as Map<String, dynamic>;
@@ -159,7 +160,7 @@ void main() {
 
       expect(json, isA<Map<String, dynamic>>());
       final jsonMap = json;
-      expect(jsonMap['records'] ?? [], isEmpty);
+      expect(jsonMap['records'] ?? <dynamic>[], isEmpty);
       expect(jsonMap['type'], isA<Map<String, dynamic>>());
 
       final typeMap = jsonMap['type'] as Map<String, dynamic>;
@@ -437,7 +438,7 @@ void main() {
       expect(parsed, isA<Map<String, dynamic>>());
 
       final parsedMap = parsed as Map<String, dynamic>;
-      expect(parsedMap['records'] ?? [], isA<List>());
+      expect(parsedMap['records'] ?? <dynamic>[], isA<List>());
       expect(parsedMap['type'], isA<Map<String, dynamic>>());
     });
   });
